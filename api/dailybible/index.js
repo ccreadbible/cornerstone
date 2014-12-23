@@ -13,18 +13,14 @@ module.exports = {
       var file = path.join(__dirname, $config.paths.archive + 'bible-'+year+'-'+month+'-'+date+'.html');
 
       if(fs.existsSync(file)){
-        // console.log('reading file');
         fs.readFile(file, function(err, data){
           if(err) 
             console.log(err);
 
           var result = services.loadHTML(data);
-          // console.log(result);
-          result.file = file;
           res.status(200).json(result);
         });
       }else{
-        // console.log('writing file');
         services.fetchPage(url, function(data){
           //write fetched data to a html file
           fs.writeFile(file, data, function(err){
@@ -32,9 +28,6 @@ module.exports = {
           });
 
           var result = services.loadHTML(data);
-          result.file = file;
-
-         // console.log(result);
           res.status(200).json(result);
         });
       }
