@@ -10,6 +10,6 @@ module.exports = {
   port: process.env.PORT || 8080,
 
   // **logging** use logging in the server with **$log** or not
-  logging: true
+  logging: false
 
 };
