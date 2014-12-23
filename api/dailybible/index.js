@@ -19,7 +19,7 @@ module.exports = {
             console.log(err);
 
           var result = services.loadHTML(data);
-          //console.log(result);
+          // console.log(result);
           res.status(200).json(result);
         });
       }else{
@@ -35,7 +35,6 @@ module.exports = {
           res.status(200).json(result);
         });
       }
-      res.end();
 
     }
 };
