@@ -15,7 +15,7 @@ module.exports = {
     $ = cheerio.load(data.toString());
 
     var content = $('hr').first().nextAll();
-    var reading1 = '', gospol = '';
+    var reading1 = '', gospel = '';
     var isReading1 = true;
    
     content.each(function(index, el){
@@ -24,7 +24,7 @@ module.exports = {
       if(isReading1){
         reading1 += '<p>' + $(this).text() + '</p>';
       }else{
-        gospol += '<p>' + $(this).text() + '</p>';
+        gospel += '<p>' + $(this).text() + '</p>';
       }
     });
 
@@ -33,7 +33,7 @@ module.exports = {
       date: $('#parent-fieldname-title').text(),
       description: $('#parent-fieldname-description').text(),
       reading1: reading1,
-      gospol: gospol
+      gospel: gospel
 
     };
 

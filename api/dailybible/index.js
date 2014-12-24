@@ -10,25 +10,46 @@ module.exports = {
           date = (today.getDate()<10)? '0'+today.getDate(): today.getDate();
       
       var url = $config.bibleHost+year+'/'+month+'/'+year+'-'+month+'-'+date+'.html';
-      var file = path.join(__dirname, $config.paths.archive + 'bible-'+year+'-'+month+'-'+date+'.html');
+      var file = path.join(__dirname, $config.paths.archive + 'bible-'+year+'-'+month+'-'+date+'.json');
+      var yesterday = new Date();
+      yesterday.setDate(yesterday.getDate()-1);
 
+      var oldFile = path.join(__dirname, $config.paths.archive + 'bible-'+
+                              yesterday.getFullYear()+'-'+(yesterday.getMonth()+1)+
+                              '-'+((yesterday.getDate()<10)? '0'+yesterday.getDate(): yesterday.getDate())+'.json');
+      
+      //read today's verses
       if(fs.existsSync(file)){
         fs.readFile(file, function(err, data){
           if(err) 
             console.log(err);
-
-          var result = services.loadHTML(data);
-          res.status(200).json(result);
+          res.status(200).json(data);
         });
       }else{
+        var result;
+
+        //load data from yesterday's verses
+        if(fs.existsSync(oldFile)){
+         
+          fs.readFile(oldFile, function(err, data){
+            if(err) throw err;
+            result = JSON.parse(data);
+          });
+          
+        }
+        //fetch today's verse of the day from ccreadbible.org
         services.fetchPage(url, function(data){
-          //write fetched data to a html file
-          fs.writeFile(file, data, function(err){
+          result = result || {verses:[]};
+          result.verses.push(services.loadHTML(data))
+         
+          //return result to client
+          res.status(200).json(result);
+
+          //write fetched data to a json file
+          fs.writeFile(file, JSON.stringify(result), function(err){
             if(err) console.log(err);
           });
 
-          var result = services.loadHTML(data);
-          res.status(200).json(result);
         });
       }
 
