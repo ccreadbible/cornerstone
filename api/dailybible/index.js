@@ -21,9 +21,10 @@ module.exports = {
       //read today's verses
       if(fs.existsSync(file)){
         fs.readFile(file, function(err, data){
+          console.log(data);
           if(err) 
             console.log(err);
-          res.status(200).json(data);
+          res.status(200).send(data);
         });
       }else{
         var result;
@@ -42,14 +43,13 @@ module.exports = {
           result = result || {verses:[]};
           result.verses.push(services.loadHTML(data))
          
-          //return result to client
-          res.status(200).json(result);
-
           //write fetched data to a json file
           fs.writeFile(file, JSON.stringify(result), function(err){
             if(err) console.log(err);
           });
 
+          //return result to client
+          res.status(200).json(result);
         });
       }
 
