@@ -1,7 +1,7 @@
-var dailybible = require('./dailybible');
+var readings = require('./readings');
 var router = require('express').Router();
 var controllers = {
-  dailybible: dailybible
+  readings: readings
 };
 
 for (var route in controllers) {
