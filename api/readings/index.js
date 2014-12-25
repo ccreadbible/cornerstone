@@ -5,23 +5,18 @@ var path = require('path');
 module.exports = {
     /*fetch today's bilbe chapter*/
     get: function (req, res) {
-      var today = new Date();
-      var year = today.getFullYear(), month = today.getMonth()+1, 
-          date = (today.getDate()<10)? '0'+today.getDate(): today.getDate();
-      
-      var yesterday = new Date();
-      yesterday.setDate(yesterday.getDate()-1);
+      var today = services.getToday();
+     
+      var yesterday = services.getYesterday();
 
-      var file = path.join(__dirname, $config.paths.archive + 'bible-'+year+'-'+month+'-'+date+'.json');
-      var oldFile = path.join(__dirname, $config.paths.archive + 'bible-'+
-                              yesterday.getFullYear()+'-'+(yesterday.getMonth()+1)+
-                              '-'+((yesterday.getDate()<10)? '0'+yesterday.getDate(): yesterday.getDate())+'.json');
+      var t_file = path.join(__dirname, 
+        $config.paths.archive + 'bible-'+today.year+'-'+today.month+'-'+today.date+'.json');
+      var y_file = path.join(__dirname, 
+        $config.paths.archive + 'bible-'+yesterday.year+'-'+yesterday.month+'-'+yesterday.date+'.json');
       
-      var url = $config.bibleHost+year+'/'+month+'/'+year+'-'+month+'-'+date+'.html';
       //read today's verses
-      if(fs.existsSync(file)){
-        fs.readFile(file, function(err, data){
-          console.log(data);
+      if(fs.existsSync(t_file)){
+        fs.readFile(t_file, function(err, data){
           if(err) 
             console.log(err);
           res.status(200).json(JSON.parse(data));
@@ -30,14 +25,16 @@ module.exports = {
         var result;
 
         //load data from yesterday's verses
-        if(fs.existsSync(oldFile)){
+        if(fs.existsSync(y_file)){
          
-          fs.readFile(oldFile, function(err, data){
+          fs.readFile(y_file, function(err, data){
             if(err) throw err;
             result = JSON.parse(data);
           });
           
         }
+
+        var url = $config.bibleHost+today.year+'/'+today.month+'/'+today.year+'-'+today.month+'-'+today.date+'.html';
         //fetch today's verse of the day from ccreadbible.org
         services.fetchPage(url, function(data){
           result = result || {verses:[]};
@@ -47,7 +44,7 @@ module.exports = {
           res.status(200).json(result);
 
           //write fetched data to a json file
-          fs.writeFile(file, JSON.stringify(result), function(err){
+          fs.writeFile(t_file, JSON.stringify(result), function(err){
             if(err) console.log(err);
           });
 

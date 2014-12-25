@@ -15,8 +15,9 @@ var all = {
     archive: '../../archive/'
   },
 
-  bibleHost: 'http://www.ccreadbible.org/Members/Bona/ccreadbible/maindata/'
-        
+  bibleHost: 'http://www.ccreadbible.org/Members/Bona/ccreadbible/maindata/',
+
+  homilyHost: 'http://www.ccreadbible.info/media/com_podcastmanager/'
 
 };
 

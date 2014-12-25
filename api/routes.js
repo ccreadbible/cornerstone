@@ -1,7 +1,9 @@
 var readings = require('./readings');
+var homily = require('./homily');
 var router = require('express').Router();
 var controllers = {
-  readings: readings
+  readings: readings,
+  homily: homily
 };
 
 for (var route in controllers) {

@@ -37,5 +37,42 @@ module.exports = {
 
     };
 
+  },
+
+  getToday: function(){
+    var date = new Date();
+
+    return{
+      year: date.getFullYear(),
+      month: date.getMonth()+1,
+      date: (date.getDate()<10)? '0'+date.getDate(): date.getDate()
+    };
+  },
+
+  getYesterday: function(){
+    var date = new Date();
+    date.setDate(date.getDate()-1);
+
+    return{
+      year: date.getFullYear(),
+      month: date.getMonth()+1,
+      date: (date.getDate()<10)? '0'+date.getDate(): date.getDate()
+    };
+  },
+
+  getLast5Days: function(){
+    var count = 0
+    var results = [];
+    while(count++ < 5){
+      var date = new Date();
+      date.setDate(date.getDate() - count);
+      results.push({
+        year: date.getFullYear(),
+        month: date.getMonth()+1, 
+        date: (date.getDate()<10)? '0'+date.getDate(): date.getDate()
+      });
+    }
+
+    return results;
   }
 };
