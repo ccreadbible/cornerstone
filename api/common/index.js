@@ -63,7 +63,8 @@ module.exports = {
   getLast5Days: function(){
     var count = 0
     var results = [];
-    while(count++ < 5){
+    while(count < 5){
+      console.log(count);
       var date = new Date();
       date.setDate(date.getDate() - count);
       results.push({
@@ -71,8 +72,8 @@ module.exports = {
         month: date.getMonth()+1, 
         date: (date.getDate()<10)? '0'+date.getDate(): date.getDate()
       });
+      count++;
     }
-
     return results;
   }
 };
