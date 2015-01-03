@@ -6,7 +6,7 @@ module.exports = {
     /*fetch today's bilbe chapter*/
     get: function (req, res) {
       var today = services.getToday();
-     
+      console.log('month', today.month);
       var yesterday = services.getYesterday();
 
       var t_file = path.join(__dirname, 
@@ -35,6 +35,7 @@ module.exports = {
         }
 
         var url = $config.bibleHost+today.year+'/'+today.month+'/'+today.year+'-'+today.month+'-'+today.date+'.html';
+        console.log(url);
         //fetch today's verse of the day from ccreadbible.org
         services.fetchPage(url, function(data){
           result = result || {verses:[]};

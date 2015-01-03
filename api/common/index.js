@@ -41,10 +41,10 @@ module.exports = {
 
   getToday: function(){
     var date = new Date();
-
+    var month = date.getMonth()+1;
     return{
       year: date.getFullYear(),
-      month: date.getMonth()+1,
+      month: month<10? '0'+month : month,
       date: (date.getDate()<10)? '0'+date.getDate(): date.getDate()
     };
   },
@@ -52,10 +52,11 @@ module.exports = {
   getYesterday: function(){
     var date = new Date();
     date.setDate(date.getDate()-1);
+    var month = date.getMonth()+1;
 
     return{
       year: date.getFullYear(),
-      month: date.getMonth()+1,
+      month: month<10? '0'+month : month,
       date: (date.getDate()<10)? '0'+date.getDate(): date.getDate()
     };
   },
@@ -67,9 +68,11 @@ module.exports = {
       console.log(count);
       var date = new Date();
       date.setDate(date.getDate() - count);
+      var month = date.getMonth()+1;
+      
       results.push({
         year: date.getFullYear(),
-        month: date.getMonth()+1, 
+        month: month<10? '0'+month : month,
         date: (date.getDate()<10)? '0'+date.getDate(): date.getDate()
       });
       count++;
