@@ -5,7 +5,6 @@ var cheerio = require('cheerio');
 module.exports = {
   fetchPage: function(url, callback){
     request(url, function(error,response, body){
-      //console.log(body);
       if (!error && response.statusCode == 200) {
         callback(body);
       }

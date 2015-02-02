@@ -7,7 +7,6 @@ module.exports = {
     get: function (req, res) {
       var today = services.getToday();
       var past = services.getLast5Days();
-
       var t_file = path.join(__dirname, 
         $config.paths.archive + 'bible-'+today.year+'-'+today.month+'-'+today.date+'.json');
 
@@ -34,10 +33,10 @@ module.exports = {
         past.forEach(function(day, index) {
           var url = $config.bibleHost+day.year+'/'+day.month+'/'+day.year+'-'+day.month+'-'+day.date+'.html';
           services.fetchPage(url, function(data) {
-            var obj = services.loadHTML(data);
-            result.verses.push(obj);
-            if(index === 4){
-              //write fetched data to a json file
+            console.log('index: '+index+'  date: '+day.date);
+            result.verses[index] = services.loadHTML(data);
+            //write fetched data 
+            if(index === 4 && result.verses[index]){
               writeFile(t_file, result);
             }
           });
