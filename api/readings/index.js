@@ -6,8 +6,8 @@ module.exports = {
     /*fetch today's bilbe chapter*/
     get: function (req, res) {
       var today = services.getToday();
-     
       var past = services.getLast5Days();
+
       var t_file = path.join(__dirname, 
         $config.paths.archive + 'bible-'+today.year+'-'+today.month+'-'+today.date+'.json');
 
