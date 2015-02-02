@@ -28,17 +28,19 @@ module.exports = {
       };
 
       var fetchData = function() {
-        var result = {verses:[]};
+        var result = {verses:[]}, count = 0;
 
         past.forEach(function(day, index) {
           var url = $config.bibleHost+day.year+'/'+day.month+'/'+day.year+'-'+day.month+'-'+day.date+'.html';
           services.fetchPage(url, function(data) {
-            console.log('index: '+index+'  date: '+day.date);
-            result.verses[index] = services.loadHTML(data);
-            //write fetched data 
-            if(index === 4 && result.verses[index]){
-              writeFile(t_file, result);
-            }
+            services.loadHTML(data, function(output){
+              result.verses[index] = output;
+              count++;
+              //write fetched data 
+              if(count === 5){
+                writeFile(t_file, result);
+              }
+            });
           });
         });
       };

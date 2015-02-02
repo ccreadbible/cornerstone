@@ -13,7 +13,7 @@ module.exports = {
     });
   },
 
-  loadHTML: function(data){
+  loadHTML: function(data, cb){
     $ = cheerio.load(data.toString());
 
     var content = $('hr').first().nextAll();
@@ -30,14 +30,15 @@ module.exports = {
       }
     });
 
-    return {
+    var output = {
       
       date: $('#parent-fieldname-title').text(),
       description: $('#parent-fieldname-description').text(),
       reading1: reading1,
       gospel: gospel
-
     };
+
+    cb(output);
 
   },
 
