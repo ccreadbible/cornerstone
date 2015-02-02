@@ -7,48 +7,48 @@ module.exports = {
     get: function (req, res) {
       var today = services.getToday();
      
-      var yesterday = services.getYesterday();
-
+      var past = services.getLast5Days();
       var t_file = path.join(__dirname, 
         $config.paths.archive + 'bible-'+today.year+'-'+today.month+'-'+today.date+'.json');
-      var y_file = path.join(__dirname, 
-        $config.paths.archive + 'bible-'+yesterday.year+'-'+yesterday.month+'-'+yesterday.date+'.json');
-      
-      //read today's verses
-      if(fs.existsSync(t_file)){
-        fs.readFile(t_file, function(err, data){
+
+      var readFile = function(latest_file) {
+        fs.readFile(latest_file, function(err, data) {
           if(err) 
             console.log(err);
           res.status(200).json(JSON.parse(data));
         });
-      }else{
-        var result;
+      };
 
-        //load data from yesterday's verses
-        if(fs.existsSync(y_file)){
-         
-          fs.readFile(y_file, function(err, data){
-            if(err) throw err;
-            result = JSON.parse(data);
-          });
-          
-        }
-
-        var url = $config.bibleHost+today.year+'/'+today.month+'/'+today.year+'-'+today.month+'-'+today.date+'.html';
-        //fetch today's verse of the day from ccreadbible.org
-        services.fetchPage(url, function(data){
-          result = result || {verses:[]};
-          result.verses.push(services.loadHTML(data))
-         
-          //return result to client
-          res.status(200).json(result);
-
-          //write fetched data to a json file
-          fs.writeFile(t_file, JSON.stringify(result), function(err){
-            if(err) console.log(err);
-          });
-
+      var writeFile = function(file, data) {
+        fs.writeFile(t_file, JSON.stringify(data), function(err) {
+          if(err)
+            console.log(err);
+          else
+            readFile(t_file);
         });
+      };
+
+      var fetchData = function() {
+        var result = {verses:[]};
+
+        past.forEach(function(day, index) {
+          var url = $config.bibleHost+day.year+'/'+day.month+'/'+day.year+'-'+day.month+'-'+day.date+'.html';
+          services.fetchPage(url, function(data) {
+            var obj = services.loadHTML(data);
+            result.verses.push(obj);
+            if(index === 4){
+              //write fetched data to a json file
+              writeFile(t_file, result);
+            }
+          });
+        });
+      };
+      
+      //read today's reading
+      if(fs.existsSync(t_file)) {
+        readFile(t_file);
+      }else{//load past 5 days readings
+        fetchData();
       }
 
     }

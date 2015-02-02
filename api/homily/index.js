@@ -6,7 +6,6 @@ module.exports = {
 
       var days = services.getLast5Days(); 
       var homilyLinks = [];
-
       days.forEach(function(d){
         homilyLinks.push({
           month: d.month,

@@ -5,9 +5,12 @@ var cheerio = require('cheerio');
 module.exports = {
   fetchPage: function(url, callback){
     request(url, function(error,response, body){
+      //console.log(body);
       if (!error && response.statusCode == 200) {
         callback(body);
       }
+      if(error)
+        console.error(error);
     });
   },
 
@@ -44,7 +47,7 @@ module.exports = {
 
     return{
       year: date.getFullYear(),
-      month: date.getMonth()+1,
+      month: (date.getMonth()+1 < 10)? '0'+(date.getMonth()+1):date.getMonth()+1,
       date: (date.getDate()<10)? '0'+date.getDate(): date.getDate()
     };
   },
@@ -64,12 +67,12 @@ module.exports = {
     var count = 0
     var results = [];
     while(count < 5){
-      console.log(count);
+     // console.log(count);
       var date = new Date();
       date.setDate(date.getDate() - count);
       results.push({
         year: date.getFullYear(),
-        month: date.getMonth()+1, 
+        month: (date.getMonth()+1 < 10)? '0'+(date.getMonth()+1):date.getMonth()+1,
         date: (date.getDate()<10)? '0'+date.getDate(): date.getDate()
       });
       count++;
