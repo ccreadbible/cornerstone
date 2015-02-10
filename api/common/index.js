@@ -17,25 +17,29 @@ module.exports = {
     $ = cheerio.load(data.toString());
 
     var content = $('hr').first().nextAll();
-    var reading1 = '', gospel = '';
+    var reading1 = '', gospel = ''
+    origin_reading1 = '', origin_gospel = '';
     var isReading1 = true;
    
     content.each(function(index, el){
       if(el.name === 'hr') isReading1 = false;
 
-      if(isReading1){
+      if(isReading1){ 
+        origin_reading1 += $(this).text();
         reading1 += '<p>' + $(this).text() + '</p>';
       }else{
+        origin_gospel += $(this).text();
         gospel += '<p>' + $(this).text() + '</p>';
       }
     });
 
     var output = {
-      
       date: $('#parent-fieldname-title').text(),
       description: $('#parent-fieldname-description').text(),
       reading1: reading1,
-      gospel: gospel
+      gospel: gospel,
+      origin_reading1: origin_reading1,
+      origin_gospel: origin_gospel
     };
 
     cb(output);
