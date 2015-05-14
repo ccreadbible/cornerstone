@@ -8,34 +8,41 @@ module.exports = {
       if (!error && response.statusCode == 200) {
         callback(body);
       }
+      if(error)
+        console.error(error);
     });
   },
 
-  loadHTML: function(data){
+  loadHTML: function(data, cb){
     $ = cheerio.load(data.toString());
 
     var content = $('hr').first().nextAll();
-    var reading1 = '', gospel = '';
+    var reading1 = '', gospel = ''
+    origin_reading1 = '', origin_gospel = '';
     var isReading1 = true;
    
     content.each(function(index, el){
       if(el.name === 'hr') isReading1 = false;
 
-      if(isReading1){
+      if(isReading1){ 
+        origin_reading1 += $(this).text();
         reading1 += '<p>' + $(this).text() + '</p>';
       }else{
+        origin_gospel += $(this).text();
         gospel += '<p>' + $(this).text() + '</p>';
       }
     });
 
-    return {
-      
+    var output = {
       date: $('#parent-fieldname-title').text(),
       description: $('#parent-fieldname-description').text(),
       reading1: reading1,
-      gospel: gospel
-
+      gospel: gospel,
+      origin_reading1: origin_reading1,
+      origin_gospel: origin_gospel
     };
+
+    cb(output);
 
   },
 
@@ -44,7 +51,7 @@ module.exports = {
     var month = date.getMonth()+1;
     return{
       year: date.getFullYear(),
-      month: month<10? '0'+month : month,
+      month: (date.getMonth()+1 < 10)? '0'+(date.getMonth()+1):date.getMonth()+1,
       date: (date.getDate()<10)? '0'+date.getDate(): date.getDate()
     };
   },
@@ -65,14 +72,14 @@ module.exports = {
     var count = 0
     var results = [];
     while(count < 5){
-      console.log(count);
+     // console.log(count);
       var date = new Date();
       date.setDate(date.getDate() - count);
       var month = date.getMonth()+1;
       
       results.push({
         year: date.getFullYear(),
-        month: month<10? '0'+month : month,
+        month: (date.getMonth()+1 < 10)? '0'+(date.getMonth()+1):date.getMonth()+1,
         date: (date.getDate()<10)? '0'+date.getDate(): date.getDate()
       });
       count++;
