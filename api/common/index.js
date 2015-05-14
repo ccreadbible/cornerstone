@@ -1,10 +1,14 @@
-/*utility functions can be used across modules*/
+//api/common/index.js
+//--------------------
+//utility functions can be used across modules
+
 var request = require('request');
 var cheerio = require('cheerio');
 
 module.exports = {
+  //fetch html from url
   fetchPage: function(url, callback){
-    request(url, function(error,response, body){
+    request(url, function(error, response, body){
       if (!error && response.statusCode == 200) {
         callback(body);
       }
@@ -12,7 +16,7 @@ module.exports = {
         console.error(error);
     });
   },
-
+  //parse the fetched html and format it
   loadHTML: function(data, cb){
     $ = cheerio.load(data.toString());
 
@@ -43,9 +47,9 @@ module.exports = {
     };
 
     cb(output);
-
   },
 
+  //format today into {year:, month:, date:} object
   getToday: function(){
     var date = new Date();
     var month = date.getMonth()+1;
@@ -56,23 +60,11 @@ module.exports = {
     };
   },
 
-  getYesterday: function(){
-    var date = new Date();
-    date.setDate(date.getDate()-1);
-    var month = date.getMonth()+1;
-
-    return{
-      year: date.getFullYear(),
-      month: month<10? '0'+month : month,
-      date: (date.getDate()<10)? '0'+date.getDate(): date.getDate()
-    };
-  },
-
-  getLast5Days: function(){
+  //format last week into an array of objects [{}, {}, ..., {}]
+  getLast7Days: function(){
     var count = 0
     var results = [];
-    while(count < 5){
-     // console.log(count);
+    while(count < 7){
       var date = new Date();
       date.setDate(date.getDate() - count);
       var month = date.getMonth()+1;

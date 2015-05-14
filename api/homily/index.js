@@ -1,10 +1,13 @@
+//api/homily/index.js
+//--------------------
+//return homily links for the past week
 var services = require('../common');
 
 module.exports = {
-    //generate audio links to last 5 days' homily
+    //generate homily links for past week 
     get: function (req, res) {
 
-      var days = services.getLast5Days(); 
+      var days = services.getLast7Days(); 
       var homilyLinks = [];
       days.forEach(function(d){
         homilyLinks.push({

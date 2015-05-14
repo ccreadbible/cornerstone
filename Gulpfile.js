@@ -2,7 +2,6 @@
 
 var gulp = require('gulp');
 var _ = require('lodash');
-var jsDoc = require('gulp-jsdoc-to-markdown');
 var concat = require('gulp-concat');
 var mocha = require('gulp-mocha');
 var docco = require('gulp-docco');
@@ -10,7 +9,8 @@ var localVars;
 
 var paths = {
   docs: [
-    'index.js'
+    'index.js',
+    './api/**/*.js'
   ]
 };
 // try to load up local vars
@@ -28,7 +28,7 @@ gulp.task('set', function() {
 
 gulp.task('docco', function() {
   return gulp.src(paths.docs)
-    .pipe(concat('Red-Bull-Vodka.js'))
+    .pipe(concat('all.js'))
     .pipe(docco({
       layout: 'parallel'
     }))

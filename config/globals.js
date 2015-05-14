@@ -24,22 +24,11 @@ global.$config = require('./env');
 // **$log** basic abstraction from `console.log()`, can be turned on or off by **$config.logging**
 global.$log = $config.logging ? console.log : function(){};
 
-var Mailer = require('../services/').mailer;
-var mailer = new Mailer();
 
 // **$handleError** global error handler function
 global.$handleError = function(error, meta) {
   console.error(error.stack, meta);
-
   if ($config.env === 'production') {
-    mailer.send({
-      to: 'pretend15@gmail.com',
-      subject: error.message,
-      text: error.stack || meta
-    })
-    .finally(function(){
-      process.exit(1);
-    });
   }
 };
 
