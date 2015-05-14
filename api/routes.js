@@ -7,6 +7,7 @@ var controllers = {
 };
 
 for (var route in controllers) {
+//router.route(path)
   router.route("/" + route)
     .get(controllers[route].get);
 }
