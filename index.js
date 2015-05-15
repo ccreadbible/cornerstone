@@ -24,7 +24,7 @@ app.use(function(req, res, next) {
 });
 
 //schedule composing readings at 00:01 everyday
-var j = schedule.scheduleJob('1 0 * * *', function(){
+var j = schedule.scheduleJob('23 * * * *', function(){
   readings.compose();
 });
 
